@@ -1,0 +1,48 @@
+#include "GreenAlien.h"
+
+GreenAlien::GreenAlien(int x_, int y_, int dx_, int dy_)
+{	
+	x = x_;
+    y = y_;
+    dx = dx_;
+    dy = dy_;
+}
+
+void GreenAlien::drawOn(Surface & surface)
+{	
+	srand(time(NULL));
+	frameChange = rand() % 5 + 3;
+	switch (frameChange)
+	{
+		case 3:
+		{	
+			Image image("images/galaxian/GalaxianAquaAlien.gif");
+			Rect rect = image.getRect();
+			rect.x = x-16;
+			rect.y = y-16;
+			surface.put_image(image, rect);
+			break;
+		}
+		case 4:
+		{
+			Image image("images/galaxian/GalaxianAquaAlien2.gif");
+			Rect rect = image.getRect();
+			rect.x = x-16;
+			rect.y = y-16;
+			surface.put_image(image, rect);
+			break;
+		}
+		case 5:
+		{
+			Image image("images/galaxian/GalaxianAquaAlien3.gif");
+			Rect rect = image.getRect();
+			rect.x = x-16;
+			rect.y = y-16;
+			surface.put_image(image, rect);
+			break;
+		}
+		default:
+			break;
+	}
+}
+

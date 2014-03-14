@@ -1,0 +1,33 @@
+#include "Swarm.h"
+
+Swarm::Swarm(int startp, int w)
+{
+	leftEdge = startp;
+	width = w;
+	rightEdge = leftEdge + width;
+	dx = 1;
+}
+
+int Swarm::getMoveDirection()
+{
+  return  dx;
+}
+
+void Swarm::update()
+{
+	leftEdge += dx;
+	rightEdge += dx;
+	setMoveDirection();
+}
+
+void Swarm::setMoveDirection()
+{
+	if (rightEdge >= W)
+	{   
+		dx = -1;   
+	}
+    else if (leftEdge <= 16)
+	{
+		dx = 1;
+	}
+}

@@ -1,0 +1,20 @@
+#include "EvilAlien.h"
+
+EvilAlien::EvilAlien(int x_, int y_, int dx_, int dy_)
+{	
+	x = x_;
+    y = y_;
+    dx = dx_;
+    dy = dy_;
+}
+
+void EvilAlien::drawOn(Surface & surface)
+{	
+	Image image("images/galaxian/GalaxianFlagship.gif");
+	Rect rect = image.getRect();
+	rect.x = x-16;
+	rect.y = y-16;
+	surface.put_image(image, rect);
+	
+}
+

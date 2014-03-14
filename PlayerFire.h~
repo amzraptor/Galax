@@ -1,0 +1,28 @@
+#ifndef PLAYERFIRE_H
+#define PLAYERFIRE_H
+
+#include "Includes.h"
+#include "Constants.h"
+
+class PlayerFire
+{
+public:
+    PlayerFire(int posX, int posY);
+	int getY();
+    void drawOn(Surface & surface);
+	void update();
+    void setActive();
+	bool getActive();
+
+private:
+    // Position
+    int x, y;
+	//active
+	bool active = 1;
+
+    // Velocity
+    int dy;
+};
+
+
+#endif

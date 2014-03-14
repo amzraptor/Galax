@@ -1,0 +1,25 @@
+#ifndef PURPLEALIEN_H
+#define PURPLEALIEN_H
+
+#include "Includes.h"
+#include "Constants.h"
+#include "Alien.h"
+
+#include <iostream>
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <cstring>
+
+
+class PurpleAlien : public Alien
+{
+public:
+	RedAlien(int x_, int y_, int dx_, int dy_);
+	void drawOn(Surface & surface);
+
+protected:
+	int frameChange;
+};
+
+#endif

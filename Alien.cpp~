@@ -1,0 +1,16 @@
+#include "Alien.h"
+
+int Alien::getY()
+{
+    return y;
+}   
+
+int Alien::getX()
+{
+    return x;
+}
+
+void Alien::update(int dir)
+{
+    x += dir;
+}

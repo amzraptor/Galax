@@ -1,0 +1,25 @@
+#ifndef SWARM_H
+#define SWARM_H
+
+#include "Includes.h"
+#include "Constants.h"
+
+class Swarm
+{
+	public:
+
+	Swarm(int startp, int w);
+	int getMoveDirection();
+	void update();
+	void setMoveDirection();
+	
+	private:
+	int dx;
+	int currentPos;
+	int leftEdge;
+	int rightEdge;
+	int width;
+};
+
+
+#endif

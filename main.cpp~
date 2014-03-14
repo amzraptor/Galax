@@ -1,0 +1,185 @@
+#include <vector>
+#include <cmath>
+#include <iostream>
+
+
+#include "Includes.h"
+#include "Constants.h"
+#include "Alien.h"
+#include "GreenAlien.h"
+#include "RedAlien.h"
+#include "PurpleAlien.h"
+#include "EvilAlien.h"
+#include "Swarm.h"
+#include "Player.h"
+#include "PlayerFire.h"
+#include "Boom.h"
+
+const int swarmStartPosX = 100;
+const int swarmStartPosY = 50;
+const int horizontalAliensNum = 9;	
+const int verticalAliensNum = 4;
+const int horizontalGap = 40;
+const int veticalGap = 60; 
+
+
+
+
+int main(int argc, char * argv[])
+{	
+    Surface surface(W, H);
+    Event event;
+	Keyboard kbd(event);
+	int lazerticks; 				//IMAA FIREEN MA LAZZER
+	int distX; 						//used to hold for dist x -x 
+	int distY;						//used to holdfor dist y -y
+	double totdist; 				//to hold distance between two points
+	int moveDir;					//to hold move direction for aliens update
+	int widthAccum;					//to hold width for swarm
+
+
+	//making stuff & such..
+	widthAccum = (horizontalGap*(horizontalAliensNum));
+	Swarm fleet(swarmStartPosX, widthAccum);
+	Player player;
+	std::vector<EvilAlien> aliens;
+	std::vector<PlayerFire> lazer;
+	std::vector<Boom> explosion;
+	
+
+	for (int j = 0; j < verticalAliensNum; j++)
+	{
+		for (int i = 0; i < horizontalAliensNum; i++)
+		{
+			aliens.push_back(EvilAlien (swarmStartPosX+(horizontalGap*i), swarmStartPosY+(veticalGap*j), 0, 0));
+		}
+	}
+
+
+    while(1)
+    {
+		/*
+    	//keyboard events
+		*/
+
+		if (event.poll() && event.type() == QUIT) break;
+
+		KeyPressed keypressed = get_keypressed();
+		if (keypressed[LEFTARROW])
+		{
+			player.move('l');
+		}
+		if (keypressed[RIGHTARROW])
+		{
+			player.move('r');
+		}
+		if (keypressed[SPACE] && (lazerticks+200)< getTicks())
+		{
+			if(lazer.size() < 3)
+			{
+				lazerticks = getTicks();
+				lazer.push_back(PlayerFire(player.getX(),player.getY()));;
+			}
+		}
+
+		/*
+		//update events
+		*/
+
+		//lazer and alien related
+		for (int j = 0; j < aliens.size(); j++)
+		{
+			for (int i = 0; i < lazer.size(); i++)
+			{
+				distX = aliens[j].getX() - lazer[i].getX();
+				distY = aliens[j].getY() - lazer[i].getY();
+				totdist = sqrt((distX*distX) + (distY*distY));
+				if ((totdist <= 10) && (lazer[i].getLive() != false))  //impact
+				{
+					explosion.push_back(Boom(aliens[j].getX(),aliens[j].getY()));
+					aliens.erase(aliens.begin()+j);
+					lazer[i].setLive(false);
+				}
+			}
+		}
+
+		//aliens and fleet
+		moveDir = fleet.getMoveDirection();
+		fleet.update();
+		
+		for (int i = 0; i < aliens.size(); i++)
+		{
+			aliens[i].update(moveDir);
+		}
+
+		//update explosions if not empty and get rid of some
+		if (!explosion.empty())
+		{
+			for (int i = 0; i < explosion.size(); i++)
+			{
+				explosion[i].update();
+			
+				if (explosion[i].getTimer()> 1000)
+				{
+					explosion.erase(explosion.begin()+i);
+				}
+			}
+		}
+
+		//lazer alone
+		for (int i = 0; i < lazer.size(); i++)
+		{
+			lazer[i].setActive();
+			lazer[i].update();
+			if (lazer[i].getActive() == false) //delete last lazer from vector if not active
+			{	
+				lazer.erase(lazer.begin());
+			}
+		}
+
+
+	
+		surface.lock();
+		surface.fill(BLACK);
+
+		/*
+		//drawing starts
+		*/
+
+		//draw aliens
+		for (int i = 0; i < aliens.size(); i++)
+		{
+			aliens[i].drawOn(surface);
+		}
+		
+		//draw player
+		player.drawOn(surface);
+
+		//draw laser
+		for (int i = 0; i < lazer.size(); i++)
+		{
+			if (lazer[i].getLive() == true)
+			{
+				lazer[i].drawOn(surface);
+			}
+		}
+
+		//draw explosions
+		for (int i = 0; i < explosion.size(); i++)
+		{
+			explosion[i].drawOn(surface);
+		}
+		
+		/*
+		//drawing ends 
+		*/
+			
+		surface.unlock();
+		surface.flip();
+	
+
+		delay(5);
+    }
+
+    return 0;
+}

@@ -1,0 +1,24 @@
+#ifndef ALIEN_H
+#define ALIEN_H
+
+#include "Includes.h"
+#include "Constants.h"
+
+class Alien
+{
+public:
+    int getX();
+    int getY();
+	virtual void drawOn(Surface & surface) = 0;
+	void update(int dir)
+
+protected:
+    // Position
+    int x, y;
+
+    // Velocity
+    int dx, dy;
+	
+};
+
+#endif
